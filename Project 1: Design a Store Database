@@ -1,0 +1,25 @@
+// Create table item template
+CREATE TABLE games (id INTEGER PRIMARY KEY, name TEXT, age_rating TEXT, review_scores TEXT, price INTEGER);
+
+// Create table items
+INSERT INTO games VALUES(1, "Modern Warfare II", "M", "4/10", 69.99);
+INSERT INTO games VALUES(2, "Persona 5", "M", "8/10", 59.99);
+INSERT INTO games VALUES(3, "Mega Man 9", "E", "9/10", 5.99);
+INSERT INTO games VALUES(4, "Shovel Knight", "E10", "10/10", 29.99);
+INSERT INTO games VALUES(5, "Summer Snow", "M", "10/10", 4.99);
+INSERT INTO games VALUES(6, "Smash Bros", "T", "8/10", 59.99);
+INSERT INTO games VALUES(7, "Castle Crashers", "T", "9/10", 14.99);
+INSERT INTO games VALUES(8, "Dead By Daylight", "M", "5/10", 29.99);
+INSERT INTO games VALUES(9, "Silent Hill", "M", "10/10", 129.99);
+INSERT INTO games VALUES(10, "Silent Hill 2", "M", "11/10", 169.99);
+INSERT INTO games VALUES(11, "Guitar Hero 3", "T", "9/10", 89.99);
+INSERT INTO games VALUES(12, "Half Life", "M", "8/10", 7.99);
+INSERT INTO games VALUES(13, "Half Life 2", "M", "10/10", 14.99);
+INSERT INTO games VALUES(14, "Portal", "T", "9/10", 9.99);
+INSERT INTO games VALUES(15, "Portal 2", "M", "8/10", 14.99);
+
+// Write table in order of least to most expensive
+SELECT id, name, age_rating, review_scores, price FROM games ORDER BY price
+
+// Display the aggregate cost of every listed item
+SELECT SUM(price) FROM games;
