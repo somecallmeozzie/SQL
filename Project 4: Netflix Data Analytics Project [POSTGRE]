@@ -58,46 +58,44 @@ VALUES
 
 
 
--- How many movies are there in the schema?
-SELECT
+-- List each director, their piece, and whether it's a movie or a show
+SELECT people.show_id, 
+  people.director,
+  titles.title,
+  titles.type
+FROM "netflix_people" people
+  LEFT JOIN "netflix_titles_info" titles 
+    ON people.show_id = titles.show_id;
 
-  COUNT(*) AS "# of Movies"
-  
+-- Find number of movies in the database
+SELECT COUNT(title)
 FROM "netflix_titles_info"
 WHERE type = 'Movie';
 
--- When were the most recent collection of shows and movies added?
+-- Find the date of Netflix's most recent catalogue update
 SELECT
-
-  MAX(date("date_added")) AS "Most recent catalogue update"
-
+MAX(DATE(date_added))
 FROM "netflix_titles_info";
 
--- Display all TV shows in alphebetical order
+-- List all titles in alphabetical order
 SELECT
-
-  title AS "Shows, alphabetized"
-
-FROM "netflix_titles_info"
-WHERE type = 'TV Show'
+title
+FROM "netflix_titles_info" 
 ORDER BY title ASC;
 
--- Who directed The Starling?
+-- Find the director of 'The Starling'
 SELECT
-
-  people.director,
-  titles.title
-  
+  people.director
 FROM "netflix_people" people
   LEFT JOIN "netflix_titles_info" titles
     ON people.show_id = titles.show_id
-WHERE titles.title = 'The Starling';
-
--- Oldest movie in the schema? When was it made?
-SELECT
-
-  *
-
-FROM "netflix_titles_info"
-ORDER BY release_year
-LIMIT 1;
+ WHERE titles.title = 'The Starling';
+ 
+ -- Find the oldest movie and its release date
+ SELECT
+   title,
+   release_year
+ FROM "netflix_titles_info"
+ WHERE type = 'Movie'
+ ORDER BY release_year ASC 
+ LIMIT 1;
