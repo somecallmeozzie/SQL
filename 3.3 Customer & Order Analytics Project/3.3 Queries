@@ -1,0 +1,64 @@
+-- Customer info
+SELECT * FROM BIT_DB.customers LIMIT 20;
+
+-- Sales from January
+SELECT * FROM BIT_DB.JanSales LIMIT 20;
+
+-- Sales from February
+SELECT * FROM BIT_DB.FebSales LIMIT 20;
+
+-- Sales from March
+SELECT * FROM BIT_DB.MarSales LIMIT 20;
+
+-- Sales from May
+SELECT * FROM BIT_DB.MaySales LIMIT 20;
+
+-- Number of iPhones sold in January
+SELECT 
+    COUNT(orderid)
+FROM BIT_DB.JanSales
+WHERE Product = 'iPhone'
+AND length(orderid) = 6    -- These two lines filter out any
+AND orderid <> 'Order ID'; -- orders without valid order ID numbers
+
+-- All account numbers present in February Sales
+SELECT DISTINCT
+    cust.acctnum
+FROM customers cust
+    INNER JOIN FebSales Feb
+    ON cust.order_id = Feb.orderID
+WHERE length(orderid) = 6
+AND orderid <> 'Order ID';
+
+-- Cheapest product sold in January and its price
+SELECT DISTINCT
+    Product,
+    price
+FROM BIT_DB.JanSales
+WHERE price IN(SELECT min(price) FROM BIT_DB.JanSales);
+
+-- Total revenue for each product in January
+SELECT
+    Product,
+    ROUND((SUM(Quantity) * price),2) AS Revenue
+FROM BIT_DB.JanSales
+GROUP BY Product;
+
+-- February sales data for the 548 Lincoln St, Seattle, WA 98101 location
+SELECT
+    Product,
+    SUM(Quantity),
+    ROUND(SUM(Quantity) * price, 2) AS Revenue
+FROM BIT_DB.FebSales
+WHERE location = '548 Lincoln St, Seattle, WA 98101'
+GROUP BY Product;
+
+-- Number of customers who ordered at least 3 products at a time in February and their spending average
+SELECT
+    COUNT(DISTINCT cust.acctnum),
+    ROUND((avg(Quantity*price)))
+FROM BIT_DB.FebSales Feb
+    LEFT JOIN BIT_DB.customers cust
+    ON Feb.orderID = cust.order_id
+WHERE Feb.Quantity > 2
+AND orderID <> 'Order ID'
