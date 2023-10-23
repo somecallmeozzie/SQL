@@ -1,0 +1,9 @@
+SELECT *
+FROM BIT_DB.FebSales;
+
+SELECT
+    Product,
+    SUM(Quantity)
+FROM BIT_DB.FebSales
+WHERE location like '%Los Angeles%'
+GROUP BY Product;
