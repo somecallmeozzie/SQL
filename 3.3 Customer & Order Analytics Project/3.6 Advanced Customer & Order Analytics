@@ -1,0 +1,51 @@
+--From this query, we learn that fifty-six New York City locations recieved at three or more orders.
+SELECT
+    location AS Location,
+    SUM(Quantity) AS Sales
+FROM BIT_DB.JanSales
+    WHERE location LIKE '%New York City%'
+    AND LENGTH(orderid) = 6
+    AND orderid <> 'Order ID'
+GROUP BY location
+    HAVING SUM(Quantity) >= 3;
+
+--From this query, we learn how many of each type of headphone were sold in February.
+SELECT
+    Product,
+    SUM(Quantity) AS Quantity
+FROM BIT_DB.FebSales
+WHERE Product LIKE '%Headphones%'
+GROUP BY Product;
+
+-- From this query, we can see the average amount spent per account in February was $190.00
+SELECT
+    ROUND(
+        SUM(Feb.Quantity*Feb.price)
+        /
+        COUNT(cust.acctnum)
+    , 2) AS Spending_Average
+FROM BIT_DB.FebSales Feb
+    LEFT JOIN BIT_DB.customers cust
+    ON Feb.orderid = cust.order_id
+WHERE LENGTH(orderid) = 6
+AND orderid <> 'Order ID';
+
+-- By changing the dividend of the previous query to the quantity of items sold, we can see that the averrage number of products purchased per account in February was 1.
+SELECT
+    SUM(Quantity)
+    /
+    COUNT(cust.acctnum) AS Quantity_Average
+FROM BIT_DB.FebSales Feb
+    LEFT JOIN BIT_DB.customers cust
+    ON Feb.orderid = cust.order_id
+WHERE LENGTH(orderid) = 6
+AND orderid <> 'Order ID';
+
+-- From this query, we can see that the product yielding the highest revenue is the Macbook Pro, which grossed $399,500 in the month of January.
+SELECT
+    Product,
+    ROUND(SUM(Quantity*price), 2) AS Revenue
+FROM BIT_DB.JanSales
+GROUP BY Product
+ORDER BY Revenue DESC
+LIMIT 1;
